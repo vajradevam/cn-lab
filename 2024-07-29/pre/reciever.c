@@ -34,25 +34,20 @@ int main(int argc, char *argv[]) {
     if (bind(sock, (struct sockaddr *)&receiver_addr, sizeof(receiver_addr)) == -1)
         error_handling("bind() error");
 
+    // recieve 
     char buffer[BUFFER_SIZE];
     socklen_t sender_addr_size = sizeof(sender_addr);
-    while (1) {
-        int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&sender_addr, &sender_addr_size);
-        buffer[recv_len] = 0;
-        printf("Received from sender: %s\n", buffer);
 
-        if (strcmp(buffer, "exit") == 0)
-            break;
+    int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&sender_addr, &sender_addr_size);
+    buffer[recv_len] = 0;
+    printf("Received from sender: %s\n", buffer);
 
-        printf("Enter message: ");
-        fgets(buffer, BUFFER_SIZE, stdin);
-        buffer[strcspn(buffer, "\n")] = 0;  // Remove the newline character
+    // send
+    printf("Enter message: ");
+    fgets(buffer, BUFFER_SIZE, stdin);
+    buffer[strcspn(buffer, "\n")] = 0;  // Remove the newline character
 
-        sendto(sock, buffer, strlen(buffer), 0, (struct sockaddr *)&sender_addr, sender_addr_size);
-
-        if (strcmp(buffer, "exit") == 0)
-            break;
-    }
+    sendto(sock, buffer, strlen(buffer), 0, (struct sockaddr *)&sender_addr, sender_addr_size);
 
     close(sock);
     return 0;
