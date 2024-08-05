@@ -40,22 +40,21 @@ int main(int argc, char *argv[]) {
     receiver_addr.sin_addr.s_addr = inet_addr(receiver_ip);
     receiver_addr.sin_port = htons(receiver_port);
 
-    // send
     char buffer[BUFFER_SIZE];
+    while (1) {
+        printf("Enter message: ");
+        fgets(buffer, BUFFER_SIZE, stdin);
+        buffer[strcspn(buffer, "\n")] = 0;  // Remove the newline character
 
-    printf("Enter message: ");
-    fgets(buffer, BUFFER_SIZE, stdin);
-    buffer[strcspn(buffer, "\n")] = 0; 
+        sendto(sock, buffer, strlen(buffer), 0, (struct sockaddr *)&receiver_addr, sizeof(receiver_addr));
 
-    sendto(sock, buffer, strlen(buffer), 0, (struct sockaddr *)&receiver_addr, sizeof(receiver_addr));
+        if (strcmp(buffer, "exit") == 0)
+            break;
 
-    //recieve
-    int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, NULL, NULL);
-
-    // int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&receiver_addr, &receiver_addr_size);
-
-    buffer[recv_len] = 0;
-    printf("Received from receiver: %s\n", buffer);
+        int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, NULL, NULL);
+        buffer[recv_len] = 0;
+        printf("%s\n", buffer);
+    }
 
     close(sock);
     return 0;

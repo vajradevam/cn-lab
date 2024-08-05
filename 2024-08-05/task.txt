@@ -1,0 +1,8 @@
+task1: write a C program to make a UDP socket through which client will 
+send a string to the server. The server will echo back the string to the client.
+When the client will send exit, the server will commit suicide.
+
+task 2: create a UDP socket through which the client will send two integer
+number to the server. THe server will add the value and return back the result.
+
+task 3: CAUSTW client will send an integer array to a server, the server will sort the array and return back to the client.
