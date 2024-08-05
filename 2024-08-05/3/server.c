@@ -11,13 +11,17 @@ void error_handling(char *message) {
     exit(1);
 }
 
-void sort(int arr[], int n) {
+void sort(int arr[]) {
+
+    int n = arr[0];
+
     for (int i = 1; i < n + 1; i++) {
-        for (int j = i; j < n-i-1 + 1; j++) {
-            if (arr[i] > arr[j]) {
-                int temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
+        for (int j = 1; j < n; j++) {
+
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
         }
     }
@@ -51,8 +55,8 @@ int main(int argc, char *argv[]) {
     
     while (1) {
         int recv_len = recvfrom(sock, buffer, BUFFER_SIZE, 0, (struct sockaddr *)&sender_addr, &sender_addr_size);
-        
-        sort(buffer, buffer[0]);
+
+        sort(buffer);
 
         sendto(sock, buffer, sizeof(buffer), 0, (struct sockaddr *)&sender_addr, sender_addr_size);
     }
